@@ -1,5 +1,7 @@
 # Avisos de remate y transmisión en Inicio
 
+El aviso muestra automáticamente la fecha, hora (Uruguay) y lugar cargados en el remate. Los campos vacíos se omiten; no es necesario repetirlos en el mensaje.
+
 En `/admin → Remates`, abrí **Aviso programado y transmisión en Inicio**.
 
 Elegí un remate próximo, publicado y con fecha. Activá el aviso y programá inicio/cierre con hora de Uruguay. Podés personalizar título y mensaje. El visitante puede cerrar el aviso o abrir la información del evento; el cierre se conserva durante la visita en esa pestaña.

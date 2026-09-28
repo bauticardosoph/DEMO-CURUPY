@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { AuctionRecord, SiteContentMap } from "./page";
-import { liveActive, noticeActive, promotionAuction } from "../lib/auction-promotion";
+import { auctionNoticeDetails, liveActive, noticeActive, promotionAuction } from "../lib/auction-promotion";
 import "./auction-promotion.css";
 
 function usePromotionClock(enabled: boolean) {
@@ -33,8 +33,9 @@ export function AuctionNotice({ content, auctions }: { content: SiteContentMap; 
   }, [key]);
   if (now === null || checkedKey !== key || closedKey === key || !noticeActive(content, auction, now)) return null;
   const close = () => { setClosedKey(key); try { sessionStorage.setItem(key, "1"); } catch { /* Private browser storage may be unavailable. */ } };
+  const details = auctionNoticeDetails(auction);
   return <aside className="auctionNotice" aria-label="Aviso de remate">
-    <a href="/proximo-remate" onClick={close}><small>Próximo remate</small><strong>{content.auction_notice_title || auction?.title}</strong>{content.auction_notice_message && <p>{content.auction_notice_message}</p>}<span>Ver información del remate →</span></a>
+    <a href="/proximo-remate" onClick={close}><small>Próximo remate</small><strong>{content.auction_notice_title || auction?.title}</strong>{content.auction_notice_message && <p>{content.auction_notice_message}</p>}{details.length > 0 && <dl className="auctionNoticeDetails">{details.map(detail => <div key={detail.label}><dt>{detail.label}</dt><dd>{detail.value}</dd></div>)}</dl>}<span>Ver información del remate →</span></a>
     <button type="button" aria-label="Cerrar aviso de remate" onClick={close}>×</button>
   </aside>;
 }

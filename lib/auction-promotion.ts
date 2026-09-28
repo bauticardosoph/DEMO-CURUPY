@@ -1,4 +1,16 @@
 type PromotionAuction = { id?: number; title: string; published: boolean; status: string; auctionDate?: string | null; streamUrl?: string | null };
+export function auctionNoticeDetails(auction: { auctionDate?: string | null; auctionTime?: string | null; location?: string | null } | null) {
+  const details: { label: string; value: string }[] = [];
+  const date = auction?.auctionDate?.trim();
+  if (date && /^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    const time = scheduleTime(`${date}T12:00`);
+    if (Number.isFinite(time)) details.push({ label: "Fecha", value: new Intl.DateTimeFormat("es-UY", { day: "numeric", month: "long", year: "numeric", timeZone: "America/Montevideo" }).format(time) });
+  }
+  const hour = auction?.auctionTime?.trim(), location = auction?.location?.trim();
+  if (hour) details.push({ label: "Hora", value: `${hour.slice(0, 5)} h · Uruguay` });
+  if (location) details.push({ label: "Lugar", value: location });
+  return details;
+}
 export function uruguayDay(now: number) {
   return new Intl.DateTimeFormat("en-CA", { timeZone: "America/Montevideo", year: "numeric", month: "2-digit", day: "2-digit" }).format(now);
 }

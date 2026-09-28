@@ -1,6 +1,16 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { noticeActive, liveActive, promotionAuction, scheduleTime, uruguayDay } from "../lib/auction-promotion.ts";
+import { auctionNoticeDetails, noticeActive, liveActive, promotionAuction, scheduleTime, uruguayDay } from "../lib/auction-promotion.ts";
+
+test("notice includes date, time and location from the event, omitting missing data", () => {
+  const details = auctionNoticeDetails({ auctionDate: "2026-10-01", auctionTime: "14:30:00", location: "  Establecimiento Curupy  " });
+  assert.deepEqual(details.map(d => d.label), ["Fecha", "Hora", "Lugar"]);
+  assert.match(details[0].value, /1.*octubre.*2026/);
+  assert.equal(details[1].value, "14:30 h · Uruguay");
+  assert.equal(details[2].value, "Establecimiento Curupy");
+  assert.deepEqual(auctionNoticeDetails(null), []);
+  assert.deepEqual(auctionNoticeDetails({ auctionDate: "2026-02-30", auctionTime: " ", location: "" }), []);
+});
 
 const auction = { id: 3, title: "Remate de prueba", published: true, status: "upcoming", auctionDate: "2026-10-01", streamUrl: "https://youtube.com/watch?v=TC9cYaiATFA" };
 const content = { auction_promotion_id: "3", auction_notice_enabled: "true", auction_notice_start: "2026-09-28T09:00", auction_notice_end: "2026-10-02T00:00", home_auction_live_enabled: "true" };
