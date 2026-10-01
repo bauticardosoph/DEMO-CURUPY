@@ -8,7 +8,7 @@ const cabinId=1;
 const allowedImages=new Set(["image/jpeg","image/png","image/webp","image/gif"]);
 const maxImageBytes=12*1024*1024;
 const bucket=mediaBucket;
-const isExternal=(value:string)=>/^https?:\/\//i.test(value);
+const isExternal=(value:string)=>/^https?:\/\//i.test(value)||value.startsWith("/curupy/");
 const publicRecord=(row:typeof galleryMedia.$inferSelect)=>({...row,url:isExternal(row.storageKey)?row.storageKey:`/api/media?key=${encodeURIComponent(row.storageKey)}`});
 
 type GalleryUploadPayload={action?:string;filename?:string;contentType?:string;storageKey?:string;size?:number;caption?:string;category?:string};

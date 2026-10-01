@@ -57,7 +57,7 @@ async function image(source: string | null | undefined, origin: string, logo = f
       return image(mediaBucket().publicUrl(key), origin, logo);
     }
     let bytes: Uint8Array;
-    if (url.origin === origin && /^\/[a-z0-9._-]+\.(?:jpe?g|png|webp|svg)$/i.test(url.pathname)) {
+    if (url.origin === origin && (/^\/[a-z0-9._-]+\.(?:jpe?g|png|webp|svg)$/i.test(url.pathname) || /^\/curupy\/[a-z0-9][a-z0-9._-]*\.(?:jpe?g|png|webp|svg)$/i.test(url.pathname))) {
       bytes = new Uint8Array(await readFile(join(process.cwd(), "public", url.pathname.slice(1))));
     } else {
       const response = await fetch(url, { signal: AbortSignal.timeout(5000) });
