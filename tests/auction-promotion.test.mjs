@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { auctionNoticeDetails, noticeActive, liveActive, promotionAuction, scheduleTime, uruguayDay } from "../lib/auction-promotion.ts";
+import { auctionCountdown, auctionNoticeDetails, noticeActive, liveActive, promotionAuction, promotionPreofferUrl, scheduleTime, uruguayDay } from "../lib/auction-promotion.ts";
 
 test("notice includes date, time and location from the event, omitting missing data", () => {
   const details = auctionNoticeDetails({ auctionDate: "2026-10-01", auctionTime: "14:30:00", location: "  Establecimiento Curupy  " });
@@ -45,4 +45,17 @@ test("next-event navigation and promotions use the same Uruguay date", () => {
   const now = scheduleTime("2026-10-01T23:59");
   assert.equal(promotionAuction([{ ...auction, id: 4, auctionDate: "2026-10-02" }, auction], now)?.id, 3);
   assert.equal(promotionAuction([auction], scheduleTime("2026-10-02T00:00")), null);
+});
+test("countdown uses the event's Uruguay time and stops at the start", () => {
+  const event = { auctionDate: "2026-10-08", auctionTime: "15:00:00" };
+  assert.deepEqual(auctionCountdown(event, scheduleTime("2026-10-07T14:59")), { days: 1, hours: 0, minutes: 1, seconds: 0 });
+  assert.equal(auctionCountdown(event, scheduleTime("2026-10-08T15:00")), null);
+  assert.equal(auctionCountdown({ auctionDate: "2026-10-08", auctionTime: "" }, scheduleTime("2026-10-07T14:59")), null);
+});
+test("preoffers require a safe URL and the selected published event", () => {
+  const config = { auction_promotion_id: "3", auction_preoffer_url: "https://example.com/preofertas" };
+  assert.equal(promotionPreofferUrl(config, auction), "https://example.com/preofertas");
+  assert.equal(promotionPreofferUrl({ ...config, auction_preoffer_url: "javascript:alert(1)" }, auction), null);
+  assert.equal(promotionPreofferUrl(config, { ...auction, id: 4 }), null);
+  assert.equal(promotionPreofferUrl(config, { ...auction, published: false }), null);
 });

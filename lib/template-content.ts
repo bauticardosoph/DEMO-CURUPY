@@ -91,6 +91,8 @@ export const templateContent: Record<string,string> = {
   home_news_carousel_position:"after_auction",
   home_gallery_carousel_position:"after_auction",
   home_auction_position:"after_genetics",
+  auction_preoffer_url:"",
+  auction_countdown_enabled:"false",
   show_history_chapters:"false",
   show_story_values:"true",
   show_story_value_1:"true",
