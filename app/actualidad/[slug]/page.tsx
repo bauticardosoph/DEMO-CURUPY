@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { and, eq } from "drizzle-orm";
 import { getDb } from "../../../db";
 import { newsPosts } from "../../../db/schema";
-import { SiteApplication } from "../../page";
+import { PublicSite } from "../../public-site";
 import { getPublicIdentity } from "../../../lib/site-identity";
 
 type PageProps={params:Promise<{slug:string}>};
@@ -24,5 +24,5 @@ export async function generateMetadata({params}:PageProps):Promise<Metadata>{
 
 export default async function NewsDetailPage({params}:PageProps){
   const {slug}=await params;
-  return <SiteApplication initialScreen="noticia" initialNewsSlug={slug}/>;
+  return <PublicSite initialScreen="noticia" initialNewsSlug={slug}/>;
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import type { AnimalRecord } from "./page";
+import type { AnimalRecord } from "./site-application";
 import { readAnimalImagePresentation } from "../lib/animal-image";
 import { hasAnimalValue } from "../lib/animal-display";
 import { registrationDisplayLabel } from "../lib/animal-labels";

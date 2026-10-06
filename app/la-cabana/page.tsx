@@ -1,3 +1,3 @@
-import { SiteApplication } from "../page";
+import { PublicSite } from "../public-site";
 
-export default function CabinPage(){return <SiteApplication initialScreen="cabana"/>}
+export default function CabinPage(){return <PublicSite initialScreen="cabana"/>}

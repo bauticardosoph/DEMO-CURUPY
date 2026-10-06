@@ -1,4 +1,5 @@
 import { and, desc, eq, isNotNull, sql } from "drizzle-orm";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { getDb } from "../../../db";
 import { siteContent, siteImages, sitePublications } from "../../../db/schema";
 import { requireApiUser } from "../../api-auth";
@@ -33,6 +34,7 @@ export async function POST(){
       const [publication]=await tx.insert(sitePublications).values({cabinId,snapshot:JSON.stringify(snapshot),publishedAt:updatedAt}).returning();
       return {publication,snapshot};
     });
+    try { revalidateTag("public-bootstrap",{expire:0}); revalidatePath("/","layout"); } catch { /* The saved publication remains valid; the short cache expires on its own. */ }
     return Response.json({publication:{id:publication.id,publishedAt:publication.publishedAt},content:snapshot.content,images:Object.entries(snapshot.images).map(([imageKey,image])=>({imageKey,url:imageUrl(imageKey,image.storageKey,image.fallbackUrl)}))});
   }catch(error){return Response.json({error:error instanceof Error?error.message:"No se pudieron publicar los cambios."},{status:500})}
 }
@@ -47,6 +49,7 @@ export async function PATCH(request:Request){
     for(const [contentKey,value] of Object.entries(snapshot.content)){const [row]=await db.select().from(siteContent).where(and(eq(siteContent.cabinId,cabinId),eq(siteContent.contentKey,contentKey)));if(row)await db.update(siteContent).set({value,draftValue:null,updatedAt:new Date().toISOString()}).where(eq(siteContent.id,row.id));else await db.insert(siteContent).values({cabinId,contentKey,value,draftValue:null,updatedAt:new Date().toISOString()})}
     for(const [imageKey,image] of Object.entries(snapshot.images)){const [row]=await db.select().from(siteImages).where(and(eq(siteImages.cabinId,cabinId),eq(siteImages.imageKey,imageKey)));if(row)await db.update(siteImages).set({storageKey:image.storageKey,contentType:image.contentType,fallbackUrl:image.fallbackUrl,draftStorageKey:null,draftContentType:null,updatedAt:new Date().toISOString()}).where(eq(siteImages.id,row.id))}
     const restored=await currentSnapshot();
+    try { revalidateTag("public-bootstrap",{expire:0}); revalidatePath("/","layout"); } catch { /* The restored publication remains valid; the short cache expires on its own. */ }
     return Response.json({content:restored.content,images:Object.entries(restored.images).map(([imageKey,image])=>({imageKey,url:imageUrl(imageKey,image.storageKey,image.fallbackUrl)}))});
   }catch(error){return Response.json({error:error instanceof Error?error.message:"No se pudo restaurar la versión."},{status:500})}
 }

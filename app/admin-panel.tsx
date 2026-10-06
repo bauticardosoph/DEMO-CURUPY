@@ -18,7 +18,7 @@ import {
   isVisible,
   pedigreeLabels,
   useSiteContent,
-} from "./page";
+} from "./site-application";
 import type {
   AdminSection,
   AnimalRecord,
@@ -36,7 +36,7 @@ import type {
   SiteContentMap,
   SiteImageMap,
   SiteImageRecord,
-} from "./page";
+} from "./site-application";
 
 export default function Admin({ go, animals, categories, updateCategories, auctions, siteImages, content, publicationPending, updateSiteImage, updateContent, publishSite, restorePublication, saveAnimal, deleteAnimal, saveAuction, deleteAuction }: { go: (s: Screen) => void; animals: AnimalRecord[]; categories:CategoryRecord[]; updateCategories:(categories:CategoryRecord[])=>void; auctions: AuctionRecord[]; siteImages:SiteImageMap; content:SiteContentMap; publicationPending:boolean; updateSiteImage:(image:SiteImageRecord)=>void; updateContent:(values:SiteContentMap)=>void; publishSite:()=>Promise<PublicationRecord>; restorePublication:(id:number)=>Promise<void>; saveAnimal: (animal: AnimalRecord) => Promise<void>; deleteAnimal: (id: number) => Promise<void>; saveAuction:(auction:AuctionRecord)=>Promise<void>; deleteAuction:(id:number)=>Promise<void> }) {
   const [section,setSection]=useState<AdminSection>("resumen");

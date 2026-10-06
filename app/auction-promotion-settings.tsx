@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { AuctionRecord, SiteContentMap } from "./page";
+import type { AuctionRecord, SiteContentMap } from "./site-application";
 import { readApiJson } from "../lib/client-upload";
 import { promotionPreofferUrl, scheduleTime } from "../lib/auction-promotion";
 import "./auction-promotion.css";

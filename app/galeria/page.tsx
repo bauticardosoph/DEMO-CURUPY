@@ -1,3 +1,3 @@
-import { SiteApplication } from "../page";
+import { PublicSite } from "../public-site";
 
-export default function GalleryPage(){return <SiteApplication initialScreen="galeria"/>}
+export default function GalleryPage(){return <PublicSite initialScreen="galeria"/>}

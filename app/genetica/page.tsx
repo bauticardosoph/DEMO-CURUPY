@@ -1,3 +1,3 @@
-import { SiteApplication } from "../page";
+import { PublicSite } from "../public-site";
 
-export default function GeneticsPage(){return <SiteApplication initialScreen="genetica"/>}
+export default function GeneticsPage(){return <PublicSite initialScreen="genetica"/>}

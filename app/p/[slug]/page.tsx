@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { and, eq } from "drizzle-orm";
 import { getDb } from "../../../db";
 import { siteContent } from "../../../db/schema";
-import { SiteApplication } from "../../page";
+import { PublicSite } from "../../public-site";
 import { getPublicIdentity } from "../../../lib/site-identity";
 
 type PageProps={params:Promise<{slug:string}>};
@@ -21,4 +21,4 @@ export async function generateMetadata({params}:PageProps):Promise<Metadata>{
   return {title,description,openGraph:{title,description,images:[]},twitter:{card:"summary",title,description,images:[]}};
 }
 
-export default async function CustomPageRoute({params}:PageProps){const {slug}=await params;return <SiteApplication initialScreen="pagina" initialPageSlug={slug}/>}
+export default async function CustomPageRoute({params}:PageProps){const {slug}=await params;return <PublicSite initialScreen="pagina" initialPageSlug={slug}/>}

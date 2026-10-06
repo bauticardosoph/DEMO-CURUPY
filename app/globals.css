@@ -209,7 +209,7 @@ footer{background:#211710}footer a{color:#d9ae80}footer>small{color:#96877b}
   .mobileMenu{min-height:44px;padding:0 0 0 16px}
   .mobileNavPanel{padding:108px 20px 32px}
   .mobileNavPanel>button{min-height:54px;padding:13px 0;font-size:27px}
-  .hero{min-height:720px}
+.hero{min-height:720px}
   .heroContent{padding:142px 20px 150px}
   .hero h1{font-size:clamp(47px,14vw,62px);line-height:.93}
   .heroCopy{margin-top:24px;font-size:17px;line-height:1.55}
@@ -379,3 +379,5 @@ footer>.brandMark img{width:auto;height:clamp(108px,8vw,136px);max-width:min(100
 @media(max-width:1200px){.animalImportSettings{grid-template-columns:repeat(3,1fr)}.animalImportSettings>button{grid-column:3}.animalImportTable>div{grid-template-columns:42px 1.5fr 1fr 1fr 110px}}
 @media(max-width:760px){.adminPageActions{width:100%;justify-content:flex-end}.animalImportSettings{grid-template-columns:1fr}.animalImportSettings>button{grid-column:auto}.animalImportSummary{grid-template-columns:repeat(2,1fr)}.animalImportSummary span:nth-child(3){border-left:0;border-top:1px solid #e4e7e4}.animalImportSummary span:nth-child(4){border-top:1px solid #e4e7e4}.animalImportTable{overflow:auto}.animalImportTable>div{min-width:720px}.animalImportPanel>footer{align-items:flex-start;gap:14px;flex-direction:column}}
 .catalogPdfAction{display:flex;justify-content:flex-end;margin:-32px 5vw 28px}.catalogPdfAction a{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 20px;border:1px solid var(--line);background:var(--ink);color:#fff;text-decoration:none;font:600 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;transition:opacity .2s}.catalogPdfAction a:hover{opacity:.82}@media(max-width:700px){.catalogPdfAction{justify-content:stretch;margin:-25px 20px 24px}.catalogPdfAction a{width:100%;text-align:center}}
+.hero{background-image:var(--hero-desktop,url('/hero-cattle.jpg'));background-position:center 46%;background-size:cover}
+@media(max-width:700px){.hero{background-image:var(--hero-mobile,var(--hero-desktop,url('/hero-cattle.jpg')))}}

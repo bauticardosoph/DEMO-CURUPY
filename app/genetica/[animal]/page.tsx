@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { and, eq } from "drizzle-orm";
 import { getDb } from "../../../db";
 import { animals } from "../../../db/schema";
-import { SiteApplication } from "../../page";
+import { PublicSite } from "../../public-site";
 import { getPublicIdentity } from "../../../lib/site-identity";
 import { AnimalDetailActions } from "../../animal-detail-actions";
 
@@ -29,5 +29,5 @@ export async function generateMetadata({params}:PageProps):Promise<Metadata>{
 export default async function AnimalPage({params}:PageProps){
   const {animal:value}=await params;
   const animal=await getAnimal(value);
-  return <><SiteApplication initialScreen="animal" initialAnimalId={animalIdFrom(value)}/>{animal&&<AnimalDetailActions id={animal.id} section="genetics"/>}</>;
+  return <><PublicSite initialScreen="animal" initialAnimalId={animalIdFrom(value)}/>{animal&&<AnimalDetailActions id={animal.id} section="genetics"/>}</>;
 }

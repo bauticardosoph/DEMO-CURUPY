@@ -1,3 +1,3 @@
-import { SiteApplication } from "../page";
+import { PublicSite } from "../public-site";
 
-export default function ContactPage(){return <SiteApplication initialScreen="contacto"/>}
+export default function ContactPage(){return <PublicSite initialScreen="contacto"/>}

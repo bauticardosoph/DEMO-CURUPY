@@ -1,3 +1,3 @@
-import { SiteApplication } from "../page";
+import { PublicSite } from "../public-site";
 
-export default function NewsPage(){return <SiteApplication initialScreen="actualidad"/>}
+export default function NewsPage(){return <PublicSite initialScreen="actualidad"/>}

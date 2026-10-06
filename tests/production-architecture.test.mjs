@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-const readRaw = (path) => readFile(new URL(`../${path}`, import.meta.url), "utf8");
+const readRaw = (path) => readFile(new URL(`../${path === "app/page.tsx" ? "app/site-application.tsx" : path}`, import.meta.url), "utf8");
 const read = async (path) => {
   const source = await readRaw(path);
   if (path !== "app/page.tsx") return source;
@@ -295,7 +295,7 @@ test("links the compact home genetics preview directly to the catalog", async ()
     read("app/page.tsx"),
     read("app/globals.css"),
   ]);
-  assert.match(page, /window\.location\.assign\("\/genetica#catalogo-animales"\)/);
+  assert.match(page, /router\.push\("\/genetica#catalogo-animales"\)/);
   assert.match(page, /window\.location\.hash!=="#catalogo-animales"/);
   assert.match(styles, /\.intro \+ \.geneticsPreview\{padding-top:55px\}/);
   assert.match(styles, /#catalogo-animales\{scroll-margin-top:90px\}/);
@@ -435,7 +435,7 @@ test("supports Criollos as an independent animal catalog", async () => {
   assert.match(admin, /Criollos en venta/);
   assert.match(page, /catalogo-criollos/);
   assert.match(page, /animal\.catalogSection==="criollos"/);
-  assert.match(page, /window\.location\.assign\(catalogUrl\)/);
+  assert.match(page, /router\.push\(catalogUrl\)/);
   assert.match(migration, /default 'genetics'/);
 });
 

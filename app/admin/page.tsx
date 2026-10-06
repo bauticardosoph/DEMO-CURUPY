@@ -1,4 +1,4 @@
-import { SiteApplication } from "../page";
+import { SiteApplication } from "../site-application";
 import { requireAdminUser } from "../auth";
 import "./importer.css";
 

@@ -1,3 +1,3 @@
-import { SiteApplication } from "../page";
+import { PublicSite } from "../public-site";
 
-export default function CriollosPage(){return <SiteApplication initialScreen="criollos"/>}
+export default function CriollosPage(){return <PublicSite initialScreen="criollos"/>}

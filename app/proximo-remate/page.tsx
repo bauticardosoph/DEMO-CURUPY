@@ -1,3 +1,3 @@
-import { SiteApplication } from "../page";
+import { PublicSite } from "../public-site";
 
-export default function AuctionPage(){return <SiteApplication initialScreen="remate"/>}
+export default function AuctionPage(){return <PublicSite initialScreen="remate"/>}
