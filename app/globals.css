@@ -340,8 +340,8 @@ body[data-palette] .homeCarousel:nth-of-type(even){background:color-mix(in srgb,
 footer>.brandMark{width:100%;min-width:0;align-items:flex-start}
 footer>.brandMark img{width:auto;height:clamp(108px,8vw,136px);max-width:min(100%,350px);object-fit:contain;object-position:left center}
 .siteHeader .brandMark{min-width:190px}
-.siteHeader .brandMark img{height:52px;max-width:200px}
-@media(max-width:900px){.siteHeader .brandMark{min-width:0}.siteHeader .brandMark img{height:45px;max-width:170px}}
+.siteHeader .brandMark img{height:72px;max-width:280px}
+@media(max-width:900px){.siteHeader .brandMark{min-width:0}.siteHeader .brandMark img{height:56px;max-width:190px}}
 @media(max-width:700px){footer>.brandMark img{height:96px;max-width:260px}}
 
 /* Granular section visibility keeps layouts balanced when individual content is hidden. */
