@@ -97,7 +97,11 @@
 .expoPedigreeBranch:before,.expoPedigreeRoot>.expoAncestor:after,.expoConnectedAncestors>.expoAncestor:after,.expoAncestors>.expoAncestor:before{content:"";position:absolute;top:50%;height:1px;width:16px;background:var(--line)}
 .expoPedigreeRoot>.expoAncestor:after,.expoConnectedAncestors>.expoAncestor:after{right:-17px}
 .expoPedigreeBranch:before,.expoAncestors>.expoAncestor:before{left:-16px}
-.expoTwoBranches:before,.expoConnectedAncestors>.expoTwoAncestors:before{content:"";position:absolute;left:-16px;top:25%;bottom:25%;width:1px;background:var(--line)}
+.expoTwoBranches>.expoPedigreeBranch:after,.expoTwoAncestors>.expoAncestor:after{content:"";position:absolute;left:-16px;width:1px;background:var(--line)}
+.expoTwoBranches>.expoPedigreeBranch:first-child:after{top:50%;bottom:-11px}
+.expoTwoBranches>.expoPedigreeBranch:last-child:after{top:-11px;bottom:50%}
+.expoTwoAncestors>.expoAncestor:first-child:after{top:50%;bottom:-7px}
+.expoTwoAncestors>.expoAncestor:last-child:after{top:-7px;bottom:50%}
 .expoMissingParent{font:11px/1.6 var(--sans);text-transform:uppercase;letter-spacing:.08em;opacity:.65}
 .expoDeps{margin-top:35px}.expoDeps>p{font:12px/1.7 var(--sans);margin:-10px 0 18px;opacity:.7}
 .expoDepsScroll{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain}
@@ -113,7 +117,7 @@
   .expoPedigreeBranches{gap:25px}
   .expoPedigreeBranch{grid-template-columns:1fr;gap:12px}
   .expoAncestors{margin-left:18px;padding-left:15px;border-left:1px solid var(--line)}
-  .expoPedigreeRoot>.expoAncestor:after,.expoPedigreeBranch:before,.expoTwoBranches:before,.expoConnectedAncestors>.expoAncestor:after,.expoConnectedAncestors>.expoTwoAncestors:before,.expoAncestors>.expoAncestor:before{display:none}
+  .expoPedigreeRoot>.expoAncestor:after,.expoPedigreeBranch:before,.expoTwoBranches>.expoPedigreeBranch:after,.expoConnectedAncestors>.expoAncestor:after,.expoTwoAncestors>.expoAncestor:after,.expoAncestors>.expoAncestor:before{display:none}
   .expoAncestor{min-height:75px;padding:16px}.expoAncestor strong{font-size:19px}
 }
 .exhibitionGallery{background:var(--paper)}
