@@ -1,4 +1,6 @@
 /* Exposiciones: fotografías, trayectoria y reconocimientos con la identidad de cada cabaña. */
+.editorialPage:has(.exhibitionPageTitle,.exhibitionDetailHero,.exhibitionEmpty) .siteHeader .brandDark img{filter:brightness(0)}
+.editorialPage:has(.exhibitionPageTitle,.exhibitionDetailHero,.exhibitionEmpty) .siteHeader.menuOpen .brandDark img{filter:brightness(0) invert(1)}
 .mainNav a{color:inherit;text-decoration:none;text-transform:uppercase;font-size:12px;letter-spacing:.17em;white-space:nowrap;padding:15px 0;position:relative}
 .mainNav a.active:after{content:"";position:absolute;left:0;right:0;bottom:7px;height:1px;background:currentColor}
 .footerLinks>a{color:#fff;text-decoration:none;text-transform:uppercase;font:11px var(--sans);letter-spacing:.18em}
