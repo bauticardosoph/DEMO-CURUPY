@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import AuctionPromotionSettings from "./auction-promotion-settings";
+import AdminExhibitions from "./admin-exhibitions";
 import type * as React from "react";
 import { readApiJson, uploadFileDirect, uploadImageDirect } from "../lib/client-upload";
 import { createBrowserSupabaseClient } from "../lib/supabase/client";
@@ -48,13 +49,13 @@ export default function Admin({ go, animals, categories, updateCategories, aucti
   useEffect(()=>{void fetch("/api/publication").then(async response=>{if(response.ok){const data=await response.json() as {publications?:PublicationRecord[]};setHistory(data.publications??[])}})},[]);
   const publish=async()=>{setPublishing(true);setPublicationMessage("");try{const publication=await publishSite();setHistory(current=>[publication,...current].slice(0,8));setPublicationMessage("✓ Sitio publicado")}catch(cause){setPublicationMessage(cause instanceof Error?cause.message:"No se pudo publicar.")}finally{setPublishing(false)}};
   const restore=async(item:PublicationRecord)=>{if(!window.confirm(`¿Restaurar la versión del ${new Date(item.publishedAt).toLocaleString("es-AR")}?`))return;setPublishing(true);setPublicationMessage("");try{await restorePublication(item.id);setPublicationMessage("✓ Versión restaurada")}catch(cause){setPublicationMessage(cause instanceof Error?cause.message:"No se pudo restaurar.")}finally{setPublishing(false)}};
-  const labels: Record<AdminSection,string> = {resumen:"Resumen",animales:"Animales",categorias:"Categorías",actualidad:"Actualidad",remates:"Remates",consultas:"Consultas",pagina:"Página web",multimedia:"Galería",cuenta:"Mi cuenta"};
+  const labels: Record<AdminSection,string> = {resumen:"Resumen",animales:"Animales",categorias:"Categorías",actualidad:"Actualidad",exposiciones:"Exposiciones",remates:"Remates",consultas:"Consultas",pagina:"Página web",multimedia:"Galería",cuenta:"Mi cuenta"};
   const choose=(value:AdminSection)=>{setSection(value);setEditor(undefined);setSaved(false)};
   return <div className="adminShell">
     <aside className="adminSidebar">
       <div className="adminBrand"><Brand/><span>Administrador</span></div>
       <nav aria-label="Secciones del administrador">
-        {(["resumen","animales","categorias","actualidad","remates","consultas","pagina","multimedia","cuenta"] as AdminSection[]).map((item,i)=><button key={item} className={section===item?"active":""} onClick={()=>choose(item)}><i>{["⌂","♧","≡","◫","◇","✉","▤","▧","○"][i]}</i>{labels[item]}{item==="animales"&&<b>{animals.length}</b>}</button>)}
+        {(["resumen","animales","categorias","actualidad","exposiciones","remates","consultas","pagina","multimedia","cuenta"] as AdminSection[]).map((item,i)=><button key={item} className={`${section===item?"active":""} ${item==="exposiciones"?"expoSidebarLink":""}`} onClick={()=>choose(item)}><i>{["⌂","♧","≡","◫","☆","◇","✉","▤","▧","○"][i]}</i>{labels[item]}{item==="animales"&&<b>{animals.length}</b>}</button>)}
       </nav>
       <div className="adminUser"><span>AD</span><p><b>Administrador</b><small>Acceso protegido</small></p></div>
     </aside>
@@ -65,6 +66,7 @@ export default function Admin({ go, animals, categories, updateCategories, aucti
         {section==="animales"&&<AdminAnimals openEditor={setEditor} animals={animals}/>}
         {section==="categorias"&&<AdminCategories categories={categories} update={updateCategories}/>}
         {section==="actualidad"&&<AdminNews content={content} updateContent={updateContent}/>}
+        {section==="exposiciones"&&<AdminExhibitions content={content} images={siteImages} animals={animals} updateContent={updateContent} updateSiteImage={updateSiteImage}/>}
         {section==="remates"&&<><AuctionHomePosition content={content} updateContent={updateContent}/><AuctionPromotionSettings content={content} auctions={auctions} updateContent={updateContent}/><AdminAuctions auctions={auctions} save={saveAuction} remove={deleteAuction}/></>}
         {section==="consultas"&&<AdminMessages/>}
         {section==="pagina"&&<PageContent siteImages={siteImages} content={content} updateSiteImage={updateSiteImage} updateContent={updateContent}/>}

@@ -1,0 +1,167 @@
+/* Exposiciones: fotografías, trayectoria y reconocimientos con la identidad de cada cabaña. */
+.mainNav a{color:inherit;text-decoration:none;text-transform:uppercase;font-size:12px;letter-spacing:.17em;white-space:nowrap;padding:15px 0;position:relative}
+.mainNav a.active:after{content:"";position:absolute;left:0;right:0;bottom:7px;height:1px;background:currentColor}
+.footerLinks>a{color:#fff;text-decoration:none;text-transform:uppercase;font:11px var(--sans);letter-spacing:.18em}
+.mobileNavPanel>a{display:flex;align-items:center;justify-content:space-between;padding:17px 0;border-bottom:1px solid rgba(255,255,255,.13);color:#fff;text-decoration:none;font:32px/1.1 var(--display)}
+.exhibitionPageTitle{padding:100px 5vw 68px;max-width:1350px}
+.exhibitionPageTitle h1{font:400 clamp(54px,7.5vw,112px)/.96 var(--display);letter-spacing:-.045em;margin:25px 0}
+.exhibitionPageTitle>p:last-child:not(.sectionNumber){max-width:620px;font:20px/1.6 var(--display)}
+.exhibitionFilters{margin:0 5vw 45px;display:flex;gap:24px;align-items:end;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:20px 0}
+.exhibitionFilters label{display:grid;gap:9px;min-width:160px;color:var(--ink);font:11px var(--sans);letter-spacing:.08em;text-transform:uppercase}
+.exhibitionFilters label:first-child{flex:1}
+.exhibitionFilters input,.exhibitionFilters select{width:100%;min-height:44px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:10px 13px;font:14px var(--sans);text-transform:none;letter-spacing:0}
+.exhibitionGrid{padding:0 5vw 100px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:65px 30px}
+.exhibitionEventLink{color:inherit;text-decoration:none;display:block;height:100%}
+.exhibitionEventImage{position:relative;aspect-ratio:16/10;overflow:hidden;background:var(--sand)}
+.exhibitionEventImage img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.exhibitionEventLink:hover .exhibitionEventImage img{transform:scale(1.025)}
+.exhibitionEventImage>span{position:absolute;bottom:18px;left:18px;background:var(--paper);color:var(--ink);padding:9px 12px;font:600 12px var(--sans)}
+.exhibitionEventCopy{padding:26px 0 18px;border-bottom:1px solid var(--line)}
+.exhibitionEyebrow,.exhibitionProvenance{font:11px/1.6 var(--sans);letter-spacing:.15em;text-transform:uppercase}
+.exhibitionEventCopy h2{font:400 clamp(30px,3vw,44px)/1.05 var(--display);margin:12px 0 18px}
+.exhibitionEventCopy>p:not(.exhibitionEyebrow):not(.exhibitionAward){font:18px/1.6 var(--display);max-width:600px}
+.exhibitionTextLink{display:inline-flex;align-items:center;gap:20px;color:inherit;text-decoration:none;text-transform:uppercase;letter-spacing:.1em;font:600 11px var(--sans);border-bottom:1px solid currentColor;padding:13px 0 8px}
+.exhibitionAward{color:var(--gold);font:600 14px/1.6 var(--sans);margin:0 0 14px}
+.exhibitionEmpty{padding:80px 5vw 120px;min-height:40vh;display:grid;place-content:center;text-align:center}
+.exhibitionEmpty h1,.exhibitionEmpty h2{font:400 36px/1.15 var(--display);max-width:650px}
+.exhibitionEmpty a,.exhibitionEmpty button{justify-self:center;color:inherit;border:0;border-bottom:1px solid currentColor;background:none;text-decoration:none;padding:10px;font:12px var(--sans)}
+.exhibitionDetailHero{position:relative;min-height:550px;display:grid;align-items:end;padding:70px 5vw;color:#fff;background:var(--deep);isolation:isolate}
+.exhibitionCover{position:absolute;z-index:-2;inset:0;width:100%;height:100%;object-fit:cover}
+.exhibitionDetailHero:after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(0deg,rgba(15,15,12,.8),rgba(15,15,12,.08))}
+.exhibitionDetailHeading{max-width:1000px}
+.exhibitionDetailHeading>a{display:inline-flex;margin-bottom:65px;color:inherit;text-decoration:none;font:11px var(--sans);letter-spacing:.1em;text-transform:uppercase}
+.exhibitionDetailHeading h1{font:400 clamp(58px,8vw,116px)/.95 var(--display);letter-spacing:-.04em;margin:15px 0 25px;overflow-wrap:anywhere}
+.exhibitionEventMeta{font:17px/1.7 var(--display);margin:0}
+.exhibitionDetailHero.exhibitionNoImage{min-height:400px}
+.exhibitionStory{padding:80px max(5vw,calc((100vw - 1050px)/2));display:grid;gap:20px}
+.exhibitionStory:has(>p):has(>div){grid-template-columns:.8fr 1fr;gap:70px}
+.exhibitionStory p{font:19px/1.75 var(--display);margin:0 0 22px;white-space:pre-line}
+.exhibitionStory .exhibitionLead{font-size:26px;line-height:1.45}
+.exhibitionWinners,.exhibitionParticipants,.exhibitionGallery,.exhibitionVideos,.animalExhibitionHonours{padding:85px 5vw}
+:is(.exhibitionWinners,.exhibitionParticipants,.exhibitionGallery,.exhibitionVideos,.animalExhibitionHonours)>header{margin-bottom:38px;max-width:950px}
+:is(.exhibitionWinners,.exhibitionParticipants,.exhibitionGallery,.exhibitionVideos,.animalExhibitionHonours) h2{font:400 clamp(40px,5vw,70px)/1.03 var(--display);letter-spacing:-.035em;margin:18px 0}
+.exhibitionWinners{background:var(--paper)}
+.exhibitionResult{color:var(--ink)}
+.exhibitionResultImage{position:relative;aspect-ratio:4/3;background:color-mix(in srgb,var(--sand) 35%,var(--paper))}
+.exhibitionResultImage:not(:has(img)){display:none}
+.exhibitionResultImage img{display:block;width:100%;height:100%;object-fit:contain}
+.exhibitionDistinction{position:absolute;left:20px;bottom:20px;max-width:calc(100% - 40px);padding:9px 13px;background:var(--deep);color:#fff;font:10px/1.5 var(--sans);text-transform:uppercase;letter-spacing:.13em}
+.exhibitionResultCopy{padding:26px 0}
+.exhibitionResultCopy h3{font:400 34px/1.12 var(--display);margin:0 0 15px}
+.exhibitionResultCopy>p:not(.exhibitionAward):not(.exhibitionReference):not(.exhibitionProvider){font:18px/1.65 var(--display);white-space:pre-line}
+.exhibitionReference{font:12px/1.7 var(--sans);color:var(--ink);opacity:.72;display:block}
+.exhibitionProvider{font:12px/1.6 var(--sans);margin-top:20px}
+.exhibitionChampion{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:clamp(30px,6vw,90px);align-items:center;margin-top:50px}
+.exhibitionChampion:has(.exhibitionResultImage:not(:has(img))){grid-template-columns:1fr}
+.exhibitionChampion .exhibitionResultCopy h3{font-size:clamp(35px,4vw,56px)}
+.exhibitionChampion .exhibitionAward{font-size:clamp(22px,2.5vw,34px);font-family:var(--display);font-weight:400;line-height:1.2}
+.exhibitionParticipants>div,.animalExhibitionHonours>div{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:35px}
+.exhibitionLinks{display:flex;gap:10px;flex-wrap:wrap;margin-top:25px}
+.exhibitionLinks>a{display:inline-flex;align-items:center;justify-content:space-between;gap:16px;min-height:45px;padding:12px 15px;border:1px solid var(--line);color:var(--ink);background:transparent;text-decoration:none;text-transform:uppercase;font:600 10px/1.4 var(--sans);letter-spacing:.08em}
+.exhibitionLinks>a:hover{background:var(--ink);color:var(--paper)}
+.exhibitionGallery{background:var(--paper)}
+.exhibitionGallery>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px}
+.exhibitionGallery figure{margin:0}
+.exhibitionGallery img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:contain;background:color-mix(in srgb,var(--sand) 25%,var(--paper))}
+.exhibitionGallery figcaption,.exhibitionVideos figcaption{font:12px/1.6 var(--sans);margin-top:14px;color:var(--ink)}
+.exhibitionGallery time{display:block;opacity:.65;margin-top:5px}
+.exhibitionVideos figure{max-width:960px;margin:40px auto}
+.exhibitionVideos iframe{display:block;aspect-ratio:16/9;width:100%;height:auto;border:0;background:#111}
+.exhibitionVideos a{color:inherit;font:15px var(--sans)}
+.exhibitionBack{padding:0 5vw 80px}
+.exhibitionHome{display:grid;grid-template-columns:1.15fr 1fr;gap:7vw;padding:85px 5vw;align-items:center;background:var(--paper)}
+.exhibitionHomeImage{background:color-mix(in srgb,var(--sand) 30%,var(--paper));aspect-ratio:4/3}
+.exhibitionHomeImage img{display:block;width:100%;height:100%;object-fit:contain}
+.exhibitionHomeCopy h2{font:400 clamp(42px,4.7vw,74px)/1 var(--display);letter-spacing:-.035em;margin:23px 0}
+.exhibitionHomeCopy h3{font:400 30px/1.15 var(--display);margin:25px 0 10px}
+.exhibitionHomeCopy>p:not(.sectionNumber):not(.exhibitionProvenance){font:18px/1.65 var(--display)}
+.exhibitionHomeCopy>.exhibitionTextLink{margin-top:22px}
+.exhibitionHome.exhibitionNoImage{grid-template-columns:1fr}
+.exhibitionNoImage .exhibitionHomeCopy{max-width:850px}
+.animalExhibitionHonours{background:var(--paper)}
+.animalExhibitionHonours>div>article{border-top:1px solid var(--line);padding-top:20px}
+.animalExhibitionHonours h3{font:400 30px/1.1 var(--display);margin:20px 0}
+.animalExhibitionHonours article>p:not(.exhibitionProvenance){font:17px/1.65 var(--display)}
+.animalExhibitionHonours .exhibitionTextLink{margin-top:20px}
+/* Admin controls stay independent of the public type scale. */
+.expoSettings{margin-bottom:28px}
+.expoSettings>.expoFields,.expoForm{padding:25px}
+.expoFields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.expoFields label,.expoOffers>label,.expoPhotoEditors label,.expoVideoEditor label{display:grid;gap:8px;font:600 12px/1.5 Arial,sans-serif;color:#536159;min-width:0}
+.expoFields :is(input,select,textarea),.expoOffers input:not([type="checkbox"]),.expoPhotoEditors input:not([type="file"]),.expoVideoEditor input{width:100%;min-height:44px;border:1px solid #cfd7d1;border-radius:6px;padding:11px 12px;background:#fff;color:#24382c;font:14px/1.5 Arial,sans-serif}
+.expoFull{grid-column:1/-1}
+.expoFields small,.expoHint{font:12px/1.6 Arial,sans-serif;color:#758078;margin:0}
+.expoEditor .expoCheck,.expoSettings .expoCheck,.expoOffers .expoCheck{display:flex;align-items:center;gap:10px;font:600 13px/1.6 Arial,sans-serif;color:#364b3c}
+.expoCheck>input[type="checkbox"]{width:18px;height:18px;min-height:18px;flex:0 0 18px;accent-color:#6c422b}
+.expoImageInput{display:grid;gap:12px;margin:24px 0;padding:18px;background:#f6f6f1;border:1px dashed #cbd2ca;border-radius:6px}
+.expoImageInput>img{display:block;max-width:420px;max-height:240px;width:100%;object-fit:contain;justify-self:start}
+.expoImageInput>label{display:grid;gap:10px;color:#536159;font-weight:600}
+.expoImageInput input[type="file"]{width:100%;min-height:44px;font-size:13px}
+.expoImageInput button,.expoPhotoEditors>article>button{justify-self:start;border:0;border-bottom:1px solid currentColor;padding:5px 0;color:#7b5141;background:none;font:12px Arial,sans-serif}
+.expoEditorSection{margin-top:38px;padding-top:30px;border-top:1px solid #dce1da}
+.expoEditorSection>header,.expoResultEditor>header{display:flex;justify-content:space-between;align-items:start;gap:20px;margin-bottom:20px}
+.expoEditorSection h3{font:500 26px/1.15 var(--display);margin:0 0 9px}
+.expoEditorSection p{line-height:1.6;color:#738077}
+.expoEditorSection>header button,.expoResultEditor>header button,.expoVideoEditor>button,.expoAdminActions button,.expoAdminEmpty button{min-height:42px;padding:10px 15px;border:1px solid #cbd4cc;border-radius:5px;background:#fff;color:#3b5742;font:600 12px/1.4 Arial,sans-serif}
+.expoResultEditor{padding:24px;margin-top:20px;border:1px solid #dde2da;border-radius:7px;background:#fff}
+.expoResultEditor>header h4{margin:8px 0;font-size:16px;color:#2c4434}
+.expoResultEditor>header>div{display:flex;gap:6px}
+.expoResultEditor>.expoCheck{margin:20px 0}
+.expoOffers{margin:25px 0 0;padding:20px;border:1px solid #d9dfd6;border-radius:5px;display:grid;gap:17px}
+.expoOffers legend{font-weight:600;padding:0 8px}.expoOffers p{margin:0}
+.expoOffers small{line-height:1.6;color:#738077}
+.expoPhotoEditors{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.expoPhotoEditors>article{display:grid;gap:15px;border:1px solid #dde2da;padding:18px;border-radius:5px}
+.expoPhotoEditors .expoImageInput{margin:0}
+.expoVideoEditor{display:grid;grid-template-columns:1fr 1fr auto;gap:16px;align-items:end;margin:18px 0}
+.expoEditor>footer{display:flex;justify-content:space-between;align-items:center;gap:20px;background:#fff;color:inherit;padding:22px 25px;border-top:1px solid #dde2da;border-radius:0 0 10px 10px}
+.expoEditor>footer>span{font:12px/1.6 Arial,sans-serif;color:#738077}
+.expoEditor>footer>div{display:flex;gap:9px}
+.expoEditor>footer button,.expoSettings>header button{min-height:44px;padding:12px 17px;border:1px solid #cbd4cc;border-radius:5px;background:#fff;color:#3b5742;font:600 12px/1.4 Arial,sans-serif}
+.expoEditor>footer button[type="submit"],.expoSettings>header button{background:#6c422b;color:#fff;border-color:#6c422b}
+.expoEditor button:disabled,.expoSettings button:disabled{opacity:.5;cursor:wait}
+.expoAdminList{display:grid;gap:20px}
+.expoAdminList>article{display:flex;gap:26px;padding:24px;align-items:center}
+.expoAdminList>article>img{width:190px;aspect-ratio:4/3;object-fit:cover;border-radius:4px}
+.expoAdminList h2{font:400 30px/1.1 var(--display);margin:10px 0}
+.expoAdminList small,.expoAdminList p{color:#738077}
+.expoAdminActions{display:flex;align-items:center;flex-wrap:wrap;gap:15px;margin-top:20px}
+.expoAdminActions a{color:#6c422b;font:12px/1.5 Arial,sans-serif}
+.expoAdminEmpty{padding:45px;text-align:center}.expoAdminEmpty p{max-width:650px;margin:15px auto 25px;line-height:1.6}
+.adminSidebar:has(.expoSidebarLink) nav{overflow-y:auto;min-height:0;padding-top:20px;padding-bottom:20px}
+@media(max-width:1150px) and (min-width:901px){
+  .siteHeader.hasExhibitions{grid-template-columns:1fr auto}
+  .siteHeader.hasExhibitions .mainNav,.siteHeader.hasExhibitions .navAction{display:none}
+  .siteHeader.hasExhibitions .mobileMenu{display:block}
+  .siteHeader.hasExhibitions.menuOpen{z-index:50;color:#fff;background:transparent}
+  .siteHeader.hasExhibitions .mobileNavPanel{position:fixed;z-index:51;inset:0;display:grid;align-content:start;gap:0;overflow-y:auto;padding:130px 5vw 40px;background:var(--deep);color:#fff}
+  .hasExhibitions .mobileNavPanel>small{margin-bottom:24px;font-size:11px;letter-spacing:.22em;text-transform:uppercase}
+  .hasExhibitions .mobileNavPanel>button{display:flex;justify-content:space-between;align-items:center;border:0;border-bottom:1px solid rgba(255,255,255,.13);background:none;color:inherit;text-align:left;padding:17px 0;font:32px/1.1 var(--display)}
+  .hasExhibitions .mobileNavPanel>button>span{font:10px var(--sans)}
+  .hasExhibitions .mobileNavPanel>.mobileAuction{margin-top:20px;font:14px var(--sans)}
+  .hasExhibitions.menuOpen .brandButton,.hasExhibitions.menuOpen .mobileMenu{position:relative;z-index:52}
+  .hasExhibitions.menuOpen .brandMark img{filter:brightness(0) invert(1)}
+}
+@media(max-width:1000px){.exhibitionParticipants>div,.animalExhibitionHonours>div{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){
+  .mobileNavPanel>a{min-height:54px;padding:13px 0;font-size:27px}
+  .exhibitionPageTitle{padding:65px 20px 35px}.exhibitionPageTitle h1{font-size:clamp(45px,12vw,64px)}.exhibitionPageTitle>p:last-child:not(.sectionNumber){font-size:18px}
+  .exhibitionFilters{margin:0 20px 30px;display:grid;grid-template-columns:1fr 1fr;gap:16px}.exhibitionFilters label{min-width:0}.exhibitionFilters label:first-child{grid-column:1/-1}
+  .exhibitionGrid{padding:0 20px 65px;grid-template-columns:1fr;gap:40px}
+  .exhibitionDetailHero{min-height:430px;padding:40px 20px}.exhibitionDetailHeading>a{margin-bottom:50px}.exhibitionDetailHeading h1{font-size:clamp(48px,13vw,70px)}.exhibitionDetailHero.exhibitionNoImage{min-height:340px}
+  .exhibitionStory,.exhibitionStory:has(>p):has(>div){padding:55px 20px;grid-template-columns:1fr;gap:20px}.exhibitionStory .exhibitionLead{font-size:23px}
+  .exhibitionWinners,.exhibitionParticipants,.exhibitionGallery,.exhibitionVideos,.animalExhibitionHonours{padding:60px 20px}
+  .exhibitionChampion,.exhibitionParticipants>div,.exhibitionGallery>div,.animalExhibitionHonours>div{grid-template-columns:1fr}
+  .exhibitionChampion{gap:10px;margin-top:35px}.exhibitionResultCopy{padding-top:24px}.exhibitionResultCopy h3{font-size:32px}
+  .exhibitionHome{padding:60px 20px;grid-template-columns:1fr;gap:30px}.exhibitionHomeCopy h2{font-size:48px}
+  .exhibitionBack{padding:0 20px 55px}.exhibitionDistinction{font-size:9px;left:12px;bottom:12px}
+  .expoFields,.expoPhotoEditors,.expoVideoEditor{grid-template-columns:1fr}.expoFull{grid-column:auto}
+  .expoSettings>.expoFields,.expoForm{padding:18px}.expoResultEditor{padding:17px}
+  .expoEditorSection>header{flex-direction:column}.expoEditorSection>header button{width:100%}
+  .expoResultEditor>header{flex-wrap:wrap}.expoOffers{padding:17px 12px}
+  .expoAdminList>article{flex-direction:column;align-items:stretch;padding:20px}.expoAdminList>article>img{width:100%}
+  .expoEditor>footer{align-items:stretch;flex-direction:column;padding:18px}.expoEditor>footer>div{justify-content:flex-end}
+  .expoSettings>header{align-items:start;gap:15px;flex-direction:column}.expoSettings>header button{width:100%}
+  .expoAdminEmpty{padding:30px 20px}.expoAdminEmpty h2{font-size:28px}
+}
+@media(prefers-reduced-motion:reduce){.exhibitionEventImage img{transition:none}}

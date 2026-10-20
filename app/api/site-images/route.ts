@@ -1,8 +1,9 @@
 import { and, eq } from "drizzle-orm";
 import { getDb } from "../../../db";
-import { siteImages } from "../../../db/schema";
+import { siteContent, siteImages } from "../../../db/schema";
 import { requireApiUser } from "../../api-auth";
 import { mediaBucket } from "../../../lib/storage";
+import { publicExhibitionImageKeys } from "../../../lib/exhibitions";
 
 const cabinId = 1;
 const allowedImages = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
@@ -27,7 +28,7 @@ type ImagePayload = {
 
 function publicRow(row: typeof siteImages.$inferSelect,draft=false) {
   const key=draft&&row.draftStorageKey!==null?row.draftStorageKey:row.storageKey;
-  return { ...row, url: key ? `/api/media?key=${encodeURIComponent(key)}` : row.imageKey==="brand-pdf" ? "" : row.fallbackUrl };
+  return { id: row.id, imageKey: row.imageKey, label: row.label, fallbackUrl: row.fallbackUrl, storageKey: key, url: key ? `/api/media?key=${encodeURIComponent(key)}` : row.imageKey==="brand-pdf" ? "" : row.fallbackUrl };
 }
 
 async function saveDraftImage(imageKey:string,label:string,fallbackUrl:string,storageKey:string,contentType:string){
@@ -46,8 +47,10 @@ export async function GET(request:Request) {
     const draft=new URL(request.url).searchParams.get("draft")==="1";
     if(draft){const unauthorized=await requireApiUser();if(unauthorized)return unauthorized}
     const rows = await getDb().select().from(siteImages).where(eq(siteImages.cabinId, cabinId));
+    const contentRows = draft ? [] : await getDb().select({ key: siteContent.contentKey, value: siteContent.value }).from(siteContent).where(and(eq(siteContent.cabinId, cabinId), eq(siteContent.contentKey, "exhibitions_json")));
+    const exhibitionKeys = publicExhibitionImageKeys(Object.fromEntries(contentRows.map(row => [row.key, row.value])));
     return Response.json(
-      { images: rows.map(row=>publicRow(row,draft)), hasDraft:rows.some(row=>row.draftStorageKey!==null) },
+      { images: rows.filter(row => draft || !row.imageKey.startsWith("expo-") || exhibitionKeys.has(row.imageKey)).map(row=>publicRow(row,draft)), hasDraft:rows.some(row=>row.draftStorageKey!==null) },
       {headers:{"Cache-Control":draft?"private, no-store":"public, s-maxage=15, stale-while-revalidate=120"}}
     );
   } catch (error) {

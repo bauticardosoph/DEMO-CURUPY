@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm";
 import { getDb } from "../../../db";
 import { siteContent, siteImages } from "../../../db/schema";
 import { publicCacheHeaders } from "../../../lib/public-cache";
+import { publicExhibitionContent, publicExhibitionImageKeys } from "../../../lib/exhibitions";
 
 const cabinId = Number(process.env.NEXT_PUBLIC_CABIN_ID || 1);
 
@@ -12,11 +13,13 @@ export async function GET() {
       db.select().from(siteContent).where(eq(siteContent.cabinId, cabinId)),
       db.select().from(siteImages).where(eq(siteImages.cabinId, cabinId)),
     ]);
+    const content = publicExhibitionContent(Object.fromEntries(contentRows.map(row => [row.contentKey, row.value])));
+    const exhibitionKeys = publicExhibitionImageKeys(content);
     return Response.json(
       {
-        content: Object.fromEntries(contentRows.map((row) => [row.contentKey, row.value])),
-        images: imageRows.map((row) => ({
-          ...row,
+        content,
+        images: imageRows.filter(row => !row.imageKey.startsWith("expo-") || exhibitionKeys.has(row.imageKey)).map((row) => ({
+          id: row.id, imageKey: row.imageKey, label: row.label, fallbackUrl: row.fallbackUrl, storageKey: row.storageKey,
           url: row.storageKey ? `/api/media?key=${encodeURIComponent(row.storageKey)}` : row.fallbackUrl,
         })),
       },

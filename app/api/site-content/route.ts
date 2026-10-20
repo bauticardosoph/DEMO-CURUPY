@@ -3,6 +3,7 @@ import { getDb } from "../../../db";
 import { siteContent } from "../../../db/schema";
 import { requireApiUser } from "../../api-auth";
 import { templateContent } from "../../../lib/template-content";
+import { publicExhibitionContent, validateExhibitions } from "../../../lib/exhibitions";
 
 const cabinId = 1;
 
@@ -11,8 +12,9 @@ export async function GET(request:Request) {
     const draft=new URL(request.url).searchParams.get("draft")==="1";
     if(draft){const unauthorized=await requireApiUser();if(unauthorized)return unauthorized}
     const rows = await getDb().select().from(siteContent).where(eq(siteContent.cabinId, cabinId));
+    const content = Object.fromEntries(rows.map(row => [row.contentKey, draft ? (row.draftValue ?? row.value) : row.value]));
     return Response.json(
-      { content: Object.fromEntries(rows.map(row => [row.contentKey, draft?(row.draftValue??row.value):row.value])), hasDraft:rows.some(row=>row.draftValue!==null) },
+      { content: draft ? content : publicExhibitionContent(content), hasDraft:rows.some(row=>row.draftValue!==null) },
       {headers:{"Cache-Control":draft?"private, no-store":"public, s-maxage=15, stale-while-revalidate=120"}}
     );
   } catch (error) {
@@ -25,6 +27,14 @@ export async function POST(request: Request) {
   if (unauthorized) return unauthorized;
   try {
     const body = await request.json() as { values?: Record<string, unknown> };
+    if (body.values && "exhibitions_json" in body.values) {
+      try {
+        if (typeof body.values.exhibitions_json !== "string") throw new Error("Los datos de las exposiciones no son válidos.");
+        body.values.exhibitions_json = JSON.stringify(validateExhibitions(body.values.exhibitions_json));
+      } catch (cause) {
+        return Response.json({ error: cause instanceof Error ? cause.message : "Revisá los datos de las exposiciones." }, { status: 400 });
+      }
+    }
     const entries = Object.entries(body.values || {}).flatMap(([contentKey, value]) => {
       if (!/^[a-z0-9_]+$/.test(contentKey) || typeof value !== "string") return [];
       const normalized=value.trim();

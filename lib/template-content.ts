@@ -114,7 +114,17 @@ export const templateContent: Record<string,string> = {
   show_contact_image:"true",
   show_animal_watermark:"false",
   show_cabana_watermark:"false",
-  custom_pages_json:"[]"
+  custom_pages_json:"[]",
+  exhibitions_json:"[]",
+  show_exhibitions:"true",
+  exhibitions_eyebrow:"Exposiciones y reconocimientos",
+  exhibitions_title:"Nuestro paso por las pistas.",
+  exhibitions_intro:"",
+  show_home_exhibitions:"false",
+  exhibitions_home_event:"",
+  exhibitions_home_result:"",
+  exhibitions_home_position:"before_auction",
+  exhibitions_home_eyebrow:"En las pistas"
 };
 
 export const templateSiteImages = [
