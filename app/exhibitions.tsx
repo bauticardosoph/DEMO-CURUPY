@@ -5,7 +5,7 @@ import { useState } from "react";
 import { readAnimalImagePresentation } from "../lib/animal-image";
 import { optimizedImageUrl } from "../lib/image-url";
 import {
-  exhibitionAnimalPath, exhibitionContactUrl, exhibitionVideoEmbed, featuredExhibition, parseExhibitions, publishedExhibitions,
+  exhibitionAnimalPath, exhibitionContactUrl, exhibitionResultPath, exhibitionVideoEmbed, featuredExhibition, parseExhibitions, publishedExhibitions,
   type Exhibition, type ExhibitionAnimal, type ExhibitionResult,
 } from "../lib/exhibitions";
 import "./exhibitions.css";
@@ -18,20 +18,20 @@ const imageFor = (key: string, images: Content, fallback = "") => key ? images[k
 const linkedAnimal = (result: ExhibitionResult, animals: ExhibitionAnimal[]) => animals.find(a => a.id === result.animalId && a.status === "published");
 const dateLabel = (date: string) => date ? new Intl.DateTimeFormat("es-UY", { day: "numeric", month: "long", year: "numeric", timeZone: "America/Montevideo" }).format(new Date(`${date}T12:00:00Z`)) : "";
 
-function ResultImage({ result, images, animals, fallback = "" }: { result: ExhibitionResult; images: Content; animals: ExhibitionAnimal[]; fallback?: string }) {
+function ResultImage({ result, images, animals, fallback = "", priority = false }: { result: ExhibitionResult; images: Content; animals: ExhibitionAnimal[]; fallback?: string; priority?: boolean }) {
   const animal = linkedAnimal(result, animals);
   const image = imageFor(result.imageKey, images, animal ? readAnimalImagePresentation(animal.image).source : fallback);
-  return image ? <img src={optimizedImageUrl(image, 1000)} alt={`${result.name}${result.award ? ` · ${result.award}` : ""}`} loading="lazy" /> : null;
+  return image ? <img src={optimizedImageUrl(image, priority ? 1600 : 1000)} alt={`${result.name}${result.award ? ` · ${result.award}` : ""}`} loading={priority ? "eager" : "lazy"} fetchPriority={priority ? "high" : undefined} /> : null;
 }
 
-export function ExhibitionLinks({ result, content, animals }: { result: ExhibitionResult; content: Content; animals: ExhibitionAnimal[] }) {
+export function ExhibitionLinks({ result, content, animals, showCatalog = true }: { result: ExhibitionResult; content: Content; animals: ExhibitionAnimal[]; showCatalog?: boolean }) {
   const animal = linkedAnimal(result, animals);
-  const path = animal ? exhibitionAnimalPath(animal) : "";
+  const path = animal && showCatalog ? exhibitionAnimalPath(animal) : "";
   const semen = exhibitionContactUrl(content, result, "semen");
   const embryos = exhibitionContactUrl(content, result, "embryos");
   if (!path && !semen && !embryos) return null;
   return <div className="exhibitionLinks">
-    {path && <Link href={path}>Ver ficha <span aria-hidden="true">↗</span></Link>}
+    {path && <Link href={path}>Ver ficha del catálogo <span aria-hidden="true">↗</span></Link>}
     {semen && <a href={semen} target="_blank" rel="noopener noreferrer">Consultar semen <span aria-hidden="true">↗</span></a>}
     {embryos && <a href={embryos} target="_blank" rel="noopener noreferrer">Consultar embriones <span aria-hidden="true">↗</span></a>}
   </div>;
@@ -51,26 +51,49 @@ export function ExhibitionHome({ content, images, animals, preview }: Props) {
       <p className="exhibitionProvenance">{event.name} · {event.year}</p>
       {result ? <><h3>{result.name}</h3>{result.rp && <span className="exhibitionReference">RP {result.rp}{result.breed ? ` · ${result.breed}` : ""}</span>}{result.notes && <p>{result.notes}</p>}<ExhibitionLinks result={result} content={content} animals={animals} /></> : event.summary && <p>{event.summary}</p>}
       <Link className="exhibitionTextLink" href={detailPath(event, preview)}>Conocer la participación <span aria-hidden="true">→</span></Link>
+      {result && <Link className="exhibitionTextLink exhibitionHomeAnimalLink" href={exhibitionResultPath(event, result, preview)}>Ver animal <span aria-hidden="true">↗</span></Link>}
     </div>
   </section>;
 }
 
-function ResultCard({ result, images, animals, content }: { result: ExhibitionResult } & Props) {
-  return <article className={`exhibitionResult ${result.champion ? "exhibitionChampion" : ""}`}>
-    <div className="exhibitionResultImage"><ResultImage result={result} images={images} animals={animals} />{result.champion && <span className="exhibitionDistinction">Reconocimiento destacado</span>}</div>
+function ResultCard({ event, result, images, animals, content, preview }: { event: Exhibition; result: ExhibitionResult } & Props) {
+  const path = exhibitionResultPath(event, result, preview);
+  return <article id={`expo-animal-${result.id}`} className={`exhibitionResult ${result.champion ? "exhibitionChampion" : ""}`}>
+    <div className="exhibitionResultImage"><Link href={path} aria-label={`Ver animal: ${result.name}`}><ResultImage result={result} images={images} animals={animals} /></Link>{result.champion && <span className="exhibitionDistinction">Reconocimiento destacado</span>}</div>
     <div className="exhibitionResultCopy">
       {result.award && <p className="exhibitionAward">{result.award}</p>}
-      <h3>{result.name}</h3>
+      <h3><Link href={path}>{result.name}</Link></h3>
       {(result.rp || result.breed || result.category) && <p className="exhibitionReference">{[result.rp ? `RP ${result.rp}` : "", result.breed, result.category].filter(Boolean).join(" · ")}</p>}
       {result.notes && <p>{result.notes}</p>}
       {result.provider && (result.semen || result.embryos) && <p className="exhibitionProvider">Comercialización: {result.provider}</p>}
-      <ExhibitionLinks result={result} content={content} animals={animals} />
+      <Link className="exhibitionTextLink exhibitionViewAnimal" href={path}>Ver animal <span aria-hidden="true">↗</span></Link>
+      <ExhibitionLinks result={result} content={content} animals={animals} showCatalog={false} />
     </div>
-    <ExhibitionGeneticsView result={result} animal={linkedAnimal(result, animals)} />
   </article>;
 }
 
-export function ExhibitionsView({ slug, ...props }: Props & { slug?: string }) {
+function ExhibitionAnimalDetail({ event, result, content, images, animals, preview }: { event: Exhibition; result: ExhibitionResult } & Props) {
+  const back = `${detailPath(event, preview)}#expo-animal-${result.id}`;
+  return <article className="exhibitionAnimalDetail">
+    <Link className="exhibitionTextLink exhibitionAnimalBack" href={back}>← Volver a {event.name}</Link>
+    <header className="exhibitionAnimalHeader">
+      <div className="exhibitionAnimalPortrait"><ResultImage result={result} images={images} animals={animals} priority /></div>
+      <div className="exhibitionAnimalIntroduction">
+        <p className="exhibitionProvenance">{event.name} · {event.year}</p>
+        {result.award && <p className="exhibitionAward">{result.award}</p>}
+        <h1>{result.name}</h1>
+        {(result.rp || result.breed || result.category) && <p className="exhibitionReference">{[result.rp ? `RP ${result.rp}` : "", result.breed, result.category].filter(Boolean).join(" · ")}</p>}
+        {result.notes && <p className="exhibitionAnimalNotes">{result.notes}</p>}
+        {result.provider && (result.semen || result.embryos) && <p className="exhibitionProvider">Comercialización: {result.provider}</p>}
+        <ExhibitionLinks result={result} content={content} animals={animals} />
+      </div>
+    </header>
+    <ExhibitionGeneticsView result={result} animal={linkedAnimal(result, animals)} />
+    <Link className="exhibitionTextLink" href={back}>← Volver a los animales de {event.name}</Link>
+  </article>;
+}
+
+export function ExhibitionsView({ slug, resultId, ...props }: Props & { slug?: string; resultId?: string }) {
   const { content, images, preview } = props;
   const [year, setYear] = useState("");
   const [breed, setBreed] = useState("");
@@ -80,6 +103,10 @@ export function ExhibitionsView({ slug, ...props }: Props & { slug?: string }) {
   if (slug) {
     const event = events.find(e => e.slug === slug);
     if (!event) return <section className="exhibitionEmpty"><h1>Esta participación no está disponible.</h1><Link href={root}>Ver exposiciones →</Link></section>;
+    if (resultId) {
+      const result = event.results.find(item => item.id === resultId);
+      return result ? <ExhibitionAnimalDetail event={event} result={result} {...props} /> : <section className="exhibitionEmpty"><h1>Este animal no está disponible en la exposición.</h1><Link href={detailPath(event, preview)}>Volver a {event.name} →</Link></section>;
+    }
     const cover = imageFor(event.imageKey, images);
     const champions = event.results.filter(r => r.champion);
     const results = event.results.filter(r => !r.champion);
@@ -90,8 +117,8 @@ export function ExhibitionsView({ slug, ...props }: Props & { slug?: string }) {
         <div className="exhibitionDetailHeading"><Link href={root}>← Volver a exposiciones</Link><p className="exhibitionEyebrow">Exposiciones y reconocimientos · {event.year}</p><h1>{event.name}</h1>{(event.date || event.location) && <p className="exhibitionEventMeta">{[dateLabel(event.date), event.location].filter(Boolean).join(" · ")}</p>}</div>
       </section>
       {(event.summary || event.story) && <section className="exhibitionStory">{event.summary && <p className="exhibitionLead">{event.summary}</p>}{event.story && <div>{event.story.split(/\n\s*\n/).filter(Boolean).map((p, i) => <p key={i}>{p}</p>)}</div>}</section>}
-      {champions.length > 0 && <section className="exhibitionWinners"><header><p className="sectionNumber">Reconocimientos destacados</p><h2>Resultados que hacen historia.</h2></header>{champions.map(result => <ResultCard key={result.id} result={result} {...props} />)}</section>}
-      {results.length > 0 && <section className="exhibitionParticipants"><header><p className="sectionNumber">Nuestra participación</p><h2>Animales en pista.</h2></header><div>{results.map(result => <ResultCard key={result.id} result={result} {...props} />)}</div></section>}
+      {champions.length > 0 && <section className="exhibitionWinners"><header><p className="sectionNumber">Reconocimientos destacados</p><h2>Resultados que hacen historia.</h2></header>{champions.map(result => <ResultCard key={result.id} event={event} result={result} {...props} />)}</section>}
+      {results.length > 0 && <section className="exhibitionParticipants"><header><p className="sectionNumber">Nuestra participación</p><h2>Animales en pista.</h2></header><div>{results.map(result => <ResultCard key={result.id} event={event} result={result} {...props} />)}</div></section>}
       {photos.length > 0 && <section className="exhibitionGallery"><header><p className="sectionNumber">La exposición en imágenes</p><h2>Momentos compartidos.</h2></header><div>{photos.map(photo => <figure key={photo.id}><img src={optimizedImageUrl(images[photo.imageKey], 1100)} alt={photo.caption || event.name} loading="lazy" />{(photo.caption || photo.date) && <figcaption>{photo.caption}{photo.date && <time dateTime={photo.date}>{dateLabel(photo.date)}</time>}</figcaption>}</figure>)}</div></section>}
       {event.videos.length > 0 && <section className="exhibitionVideos"><header><p className="sectionNumber">En movimiento</p><h2>Desde la pista.</h2></header>{event.videos.map(video => { const embed = exhibitionVideoEmbed(video.url); return <figure key={video.id}>{embed ? <iframe src={embed} title={video.caption || `Video de ${event.name}`} loading="lazy" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen /> : <a href={video.url} target="_blank" rel="noopener noreferrer">{video.caption || "Ver video de la exposición"} ↗</a>}{embed && video.caption && <figcaption>{video.caption}</figcaption>}</figure>; })}</section>}
       <div className="exhibitionBack"><Link className="exhibitionTextLink" href={root}>Todas las exposiciones →</Link></div>

@@ -16,12 +16,11 @@ export function ExhibitionGeneticsView({ result, animal }: Props) {
   const hasPrecision = genetics.deps.some(dep => hasAnimalValue(dep.precision));
   const hasPercentile = genetics.deps.some(dep => hasAnimalValue(dep.percentile));
   if (!branches.length && !genetics.deps.length && !genetics.registration && !genetics.birthDate) return null;
-  return <details className="expoGenetics" open={result.champion}>
-    <summary>{branches.length ? genetics.deps.length ? "Pedigree y DEPs" : "Pedigree" : genetics.deps.length ? "DEPs y datos del ejemplar" : "Datos del ejemplar"}<span aria-hidden="true">＋</span></summary>
+  return <div className="expoGenetics expoGeneticsFull">
     <div className="expoGeneticsBody">
       {(genetics.registration || genetics.birthDate) && <dl className="expoGeneticsIdentity">{genetics.registration && <div><dt>HBU</dt><dd>{genetics.registration}</dd></div>}{genetics.birthDate && <div><dt>Nacimiento</dt><dd><time dateTime={genetics.birthDate}>{dateLabel(genetics.birthDate)}</time></dd></div>}</dl>}
       {branches.length > 0 && <section className="expoPedigree" aria-label={`Pedigree de ${result.name}`}>
-        <h4>Pedigree</h4>
+        <h2>Pedigree</h2>
         <div className="expoPedigreeTree">
           <div className="expoPedigreeRoot"><Ancestor label="Ejemplar" member={{ relation: "self", name: result.name, registration: genetics.registration }} /></div>
           <div className={`expoPedigreeBranches ${branches.length > 1 ? "expoTwoBranches" : ""}`}>
@@ -33,7 +32,7 @@ export function ExhibitionGeneticsView({ result, animal }: Props) {
         </div>
       </section>}
       {genetics.deps.length > 0 && <section className="expoDeps" aria-label={`DEPs de ${result.name}`}>
-        <h4>Evaluación genética · DEPs</h4>
+        <h2>Evaluación genética · DEPs</h2>
         <p>{result.depsSource === "manual" ? "Datos de esta participación" : "Datos actuales de la ficha del catálogo"}{genetics.evaluationDate && <> · Evaluación del <time dateTime={genetics.evaluationDate}>{dateLabel(genetics.evaluationDate)}</time></>}</p>
         {/* Keyboard focus is needed to scroll a wide table without a mouse. */}
         {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
@@ -46,5 +45,5 @@ export function ExhibitionGeneticsView({ result, animal }: Props) {
         </div>
       </section>}
     </div>
-  </details>;
+  </div>;
 }

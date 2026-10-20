@@ -34,7 +34,9 @@ En **Exposiciones → Editar participación → Animales y resultados**, cada ej
 - La fecha de evaluación es opcional y corresponde a los DEPs manuales de esa participación. No se asigna automáticamente la fecha actual.
 - Podés desactivar **Mostrar pedigree** o **Mostrar DEPs** de manera independiente sin borrar lo cargado. Los ascendientes vacíos y los DEPs sin indicador o sin valor no aparecen; el valor **0** sí se muestra. Precisión y percentil se omiten por completo si ningún indicador los tiene.
 
-Los reconocimientos destacados muestran el bloque técnico desplegado. En los demás animales se abre al pulsar **Pedigree y DEPs**, para mantener legible la página. La tabla se desplaza horizontalmente en pantallas pequeñas y el pedigree se reorganiza por rama.
+Las tarjetas de la exposición muestran la fotografía, el nombre, el premio y el botón **Ver animal**. La foto y el nombre también abren una página individual del ejemplar dentro de esa participación. Allí se muestran sus datos, el pedigree completo y los DEPs a todo el ancho, sin desplegarlos dentro de una tarjeta angosta. Esto funciona también para animales sin ficha en el catálogo.
+
+La página individual tiene un enlace para volver al animal en la exposición, conserva las opciones de consulta comercial y, si corresponde, permite abrir su ficha del catálogo. Cada animal tiene una dirección propia que podés compartir. La vista previa conserva el acceso de administrador y no se publica ni se indexa. En pantallas pequeñas, la tabla se desplaza horizontalmente y el pedigree se reorganiza por rama.
 
 Guardá la participación y después elegí **Publicar cambios**. No hace falta ejecutar SQL adicional ni volver a cargar participaciones anteriores.
 

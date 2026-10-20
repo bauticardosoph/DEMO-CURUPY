@@ -203,6 +203,10 @@ export function exhibitionAnimalPath(animal: ExhibitionAnimal) {
   return `/${animal.catalogSection === "criollos" ? "criollos" : "genetica"}/${animal.id}-${exhibitionSlug(animal.name)}`;
 }
 
+export function exhibitionResultPath(event: Pick<Exhibition, "slug">, result: Pick<ExhibitionResult, "id">, preview = false) {
+  return `/exposiciones/${encodeURIComponent(event.slug)}/animales/${encodeURIComponent(result.id)}${preview ? "?preview=1" : ""}`;
+}
+
 export function exhibitionContactUrl(content: Content, result: ExhibitionResult, kind: "semen" | "embryos") {
   if (!result[kind]) return "";
   const custom = exhibitionUrl(kind === "semen" ? result.semenUrl : result.embryosUrl);

@@ -2,11 +2,12 @@ import { getPublicBootstrap } from "../lib/public-bootstrap";
 import { optimizedImageUrl } from "../lib/image-url";
 import { SiteApplication, type Screen } from "./site-application";
 
-export async function PublicSite({ initialScreen = "home", initialNewsSlug, initialAnimalId, initialPageSlug }: {
+export async function PublicSite({ initialScreen = "home", initialNewsSlug, initialAnimalId, initialPageSlug, initialExhibitionResultId }: {
   initialScreen?: Screen;
   initialNewsSlug?: string;
   initialAnimalId?: number;
   initialPageSlug?: string;
+  initialExhibitionResultId?: string;
 }) {
   const initialPublicData = await getPublicBootstrap().catch(() => undefined);
   const hero = initialScreen === "home"
@@ -22,6 +23,7 @@ export async function PublicSite({ initialScreen = "home", initialNewsSlug, init
       initialNewsSlug={initialNewsSlug}
       initialAnimalId={initialAnimalId}
       initialPageSlug={initialPageSlug}
+      initialExhibitionResultId={initialExhibitionResultId}
       initialPublicData={initialPublicData}
     />
   </>;

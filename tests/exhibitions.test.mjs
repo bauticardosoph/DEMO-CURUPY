@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { exhibitionAnimalPath, exhibitionContactUrl, exhibitionDate, exhibitionUrl, exhibitionVideoEmbed, exhibitionCatalogGenetics, exhibitionPedigreeBranches, featuredExhibition, parseExhibitions, publicExhibitionContent, publicExhibitionImageKeys, publishedExhibitions, resolveExhibitionGenetics, validateExhibitions } from "../lib/exhibitions.ts";
 
 const result = { id: "winner-1", animalId: 12, name: "Animal de prueba", rp: "100", breed: "Hereford", award: "Gran Campeón", category: "Senior", notes: "", champion: true, imageKey: "expo-winner", semen: true, semenUrl: "", embryos: true, embryosUrl: "https://example.com/embriones", provider: "" };
@@ -120,4 +121,28 @@ test("invalid genetic dates, duplicate relatives and oversized DEPs fail validat
   assert.throws(() => normalizedResult({ pedigree: [{ relation: "unknown", name: "Incorrecto" }] }));
   assert.throws(() => normalizedResult({ deps: Array.from({ length: 41 }, () => animal.deps[0]) }));
   assert.throws(() => normalizedResult({ pedigree: Array.from({ length: 7 }, () => animal.pedigree[0]) }));
+});
+
+test("exhibition animal URLs are stable, scoped to their event and preserve authenticated preview", async () => {
+  const { exhibitionResultPath } = await import("../lib/exhibitions.ts");
+  assert.equal(exhibitionResultPath(event, result), "/exposiciones/exposicion-2026/animales/winner-1");
+  assert.equal(exhibitionResultPath(event, { ...result, name: "Nuevo nombre" }), exhibitionResultPath(event, result));
+  assert.equal(exhibitionResultPath(event, result, true), "/exposiciones/exposicion-2026/animales/winner-1?preview=1");
+  assert.notEqual(exhibitionResultPath({ ...event, slug: "otra-exposicion" }, result), exhibitionResultPath(event, result));
+});
+
+test("cards open a dedicated animal page instead of squeezing the pedigree into the grid", () => {
+  const source = readFileSync(new URL("../app/exhibitions.tsx", import.meta.url), "utf8");
+  const cards = source.slice(source.indexOf("function ResultCard("), source.indexOf("function ExhibitionAnimalDetail("));
+  const detail = source.slice(source.indexOf("function ExhibitionAnimalDetail("), source.indexOf("export function ExhibitionsView("));
+  assert.doesNotMatch(cards, /<ExhibitionGeneticsView/);
+  assert.match(cards, /exhibitionResultPath\(event, result, preview\)/);
+  assert.match(cards, /Ver animal/);
+  assert.match(detail, /<ExhibitionGeneticsView/);
+  assert.match(detail, /Volver a/);
+  const route = readFileSync(new URL("../app/exposiciones/[slug]/animales/[resultId]/page.tsx", import.meta.url), "utf8");
+  assert.match(route, /requireAdminUser\(exhibitionResultPath/);
+  assert.match(route, /event\?\.results\.some\(result => result.id === resultId\)/);
+  assert.match(route, /notFound\(\)/);
+  assert.match(route, /canonical: exhibitionResultPath/);
 });
