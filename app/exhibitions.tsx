@@ -9,6 +9,7 @@ import {
   type Exhibition, type ExhibitionAnimal, type ExhibitionResult,
 } from "../lib/exhibitions";
 import "./exhibitions.css";
+import { ExhibitionGeneticsView } from "./exhibition-genetics";
 
 type Content = Record<string, string>;
 type Props = { content: Content; images: Content; animals: ExhibitionAnimal[]; preview?: boolean };
@@ -65,6 +66,7 @@ function ResultCard({ result, images, animals, content }: { result: ExhibitionRe
       {result.provider && (result.semen || result.embryos) && <p className="exhibitionProvider">Comercialización: {result.provider}</p>}
       <ExhibitionLinks result={result} content={content} animals={animals} />
     </div>
+    <ExhibitionGeneticsView result={result} animal={linkedAnimal(result, animals)} />
   </article>;
 }
 

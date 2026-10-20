@@ -22,6 +22,22 @@ El vínculo al catálogo utiliza el identificador del animal, no su nombre. Camb
 
 El botón **Ver ficha** aparece solo si la ficha vinculada sigue publicada. Los premios se muestran también dentro de esa ficha, con un enlace a la exposición correspondiente. Si el animal se retira del catálogo, la participación histórica puede conservarse con su nombre, resultado y fotografía propios.
 
+## Pedigree y DEPs de los animales en pista
+
+En **Exposiciones → Editar participación → Animales y resultados**, cada ejemplar tiene el bloque **Pedigree y evaluación genética**.
+
+- Podés cargar HBU, fecha de nacimiento, padre, madre y los cuatro abuelos. Cada ascendiente admite nombre y HBU opcional. Los abuelos maternos pertenecen únicamente a la rama de la madre.
+- Para pedigree y DEPs elegís el origen por separado: **Usar datos actuales del catálogo** o **Cargar datos de esta exposición**. Al vincular una ficha, se propone usar el catálogo si todavía no cargaste datos propios.
+- En modo catálogo, los datos cambian al actualizar la ficha y solo aparecen al público si esa ficha está publicada. No se muestran datos heredados de fichas en borrador.
+- En modo manual podés cargar un animal sin ficha. Si ya tiene ficha vinculada, los botones **Copiar pedigree** y **Copiar DEPs** crean copias independientes que podés editar sin modificar el catálogo. Una copia histórica es recomendable para conservar la evaluación con la que se presentó el animal.
+- Cada DEP admite indicador, valor, precisión y percentil. Podés agregar hasta 40 indicadores con los nombres y unidades de la evaluación original. El percentil se muestra como **Top 5%** o **Top 20%**, sin barras. Se conservan también los percentiles que ya vinieran de una ficha existente.
+- La fecha de evaluación es opcional y corresponde a los DEPs manuales de esa participación. No se asigna automáticamente la fecha actual.
+- Podés desactivar **Mostrar pedigree** o **Mostrar DEPs** de manera independiente sin borrar lo cargado. Los ascendientes vacíos y los DEPs sin indicador o sin valor no aparecen; el valor **0** sí se muestra. Precisión y percentil se omiten por completo si ningún indicador los tiene.
+
+Los reconocimientos destacados muestran el bloque técnico desplegado. En los demás animales se abre al pulsar **Pedigree y DEPs**, para mantener legible la página. La tabla se desplaza horizontalmente en pantallas pequeñas y el pedigree se reorganiza por rama.
+
+Guardá la participación y después elegí **Publicar cambios**. No hace falta ejecutar SQL adicional ni volver a cargar participaciones anteriores.
+
 ## Semen y embriones
 
 Dentro de cada animal presentado se puede habilitar **Permitir consultas de semen** y/o **Permitir consultas de embriones**. Cada opción admite su propio enlace a una página de un centro genético o a WhatsApp y un nombre del responsable comercial.

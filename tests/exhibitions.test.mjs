@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { exhibitionAnimalPath, exhibitionContactUrl, exhibitionDate, exhibitionUrl, exhibitionVideoEmbed, featuredExhibition, parseExhibitions, publicExhibitionContent, publicExhibitionImageKeys, publishedExhibitions, validateExhibitions } from "../lib/exhibitions.ts";
+import { exhibitionAnimalPath, exhibitionContactUrl, exhibitionDate, exhibitionUrl, exhibitionVideoEmbed, exhibitionCatalogGenetics, exhibitionPedigreeBranches, featuredExhibition, parseExhibitions, publicExhibitionContent, publicExhibitionImageKeys, publishedExhibitions, resolveExhibitionGenetics, validateExhibitions } from "../lib/exhibitions.ts";
 
 const result = { id: "winner-1", animalId: 12, name: "Animal de prueba", rp: "100", breed: "Hereford", award: "Gran Campeón", category: "Senior", notes: "", champion: true, imageKey: "expo-winner", semen: true, semenUrl: "", embryos: true, embryosUrl: "https://example.com/embriones", provider: "" };
 const event = { id: "show-1", slug: "exposicion-2026", name: "Exposición de prueba", year: "2026", date: "2026-09-15", location: "Uruguay", summary: "Participación de prueba", story: "", imageKey: "expo-cover", published: true, results: [result], photos: [], videos: [] };
@@ -45,4 +45,79 @@ test("videos embed only trusted YouTube hosts and external links reject active s
   assert.equal(exhibitionUrl("javascript:alert(1)"), "");
   assert.equal(exhibitionUrl("data:text/html,test"), "");
   assert.equal(exhibitionUrl("https://user:password@example.com"), "");
+});
+
+const animal = {
+  id: 12, name: "Animal de prueba", status: "published", registration: "234238", birthDate: "2024-09-11",
+  pedigree: [
+    { relation: "sire", name: "Padre", registration: "100" },
+    { relation: "dam", name: "Madre" },
+    { relation: "paternal_grandsire", name: "Abuelo paterno" },
+    { relation: "paternal_granddam", name: "Abuela paterna" },
+    { relation: "maternal_grandsire", name: "Abuelo materno" },
+    { relation: "maternal_granddam", name: "Abuela materna" },
+  ],
+  deps: [{ label: "Peso al nacer", value: "0", precision: "0.42", percentile: "5" }, { label: "Sin dato", value: "" }],
+};
+const normalizedResult = (extra = {}) => validateExhibitions(JSON.stringify([{ ...event, results: [{ ...result, ...extra }] }]))[0].results[0];
+
+test("existing linked results inherit published catalog genetics without another query", () => {
+  const row = normalizedResult();
+  assert.equal(row.pedigreeSource, "catalog");
+  assert.equal(row.showDeps, true);
+  const genetics = resolveExhibitionGenetics(row, animal);
+  assert.equal(genetics.registration, "234238");
+  assert.equal(genetics.birthDate, "2024-09-11");
+  assert.equal(genetics.pedigree.length, 6);
+  assert.equal(genetics.deps.length, 1);
+  assert.equal(genetics.deps[0].value, "0");
+  assert.equal(resolveExhibitionGenetics(row, { ...animal, status: "draft" }).deps.length, 0);
+  assert.equal(resolveExhibitionGenetics(row, { ...animal, id: 99 }).pedigree.length, 0);
+  assert.equal(resolveExhibitionGenetics(row).registration, "");
+});
+
+test("independent exhibition snapshots roundtrip, preserve zero and hide incomplete data", () => {
+  const snapshot = exhibitionCatalogGenetics(animal);
+  const row = normalizedResult({ ...snapshot, animalId: null, pedigreeSource: "manual", depsSource: "manual", evaluationDate: "2026-10-20",
+    deps: [...snapshot.deps, { label: "Cero numérico", value: 0, precision: 0 }, { label: "", value: "3" }, { label: "Ausente", value: "—" }],
+  });
+  const restored = normalizedResult(JSON.parse(JSON.stringify(row)));
+  assert.deepEqual(restored, row);
+  const genetics = resolveExhibitionGenetics(restored, { ...animal, deps: [{ label: "Nuevo DEP", value: "88" }] });
+  assert.equal(genetics.deps.length, 2);
+  assert.equal(genetics.deps[0].value, "0");
+  assert.equal(genetics.deps[1].precision, "0");
+  assert.equal(genetics.evaluationDate, "2026-10-20");
+  assert.equal(genetics.pedigree[0].name, "Padre");
+  assert.equal(genetics.registration, "234238");
+});
+
+test("pedigree and DEPs can be hidden independently without erasing their values", () => {
+  const snapshot = exhibitionCatalogGenetics(animal);
+  const hidden = normalizedResult({ ...snapshot, pedigreeSource: "manual", depsSource: "manual", showDeps: false });
+  assert.equal(hidden.deps.length, 2);
+  assert.equal(resolveExhibitionGenetics(hidden).deps.length, 0);
+  assert.equal(resolveExhibitionGenetics(hidden).pedigree.length, 6);
+  assert.equal(resolveExhibitionGenetics({ ...hidden, showPedigree: false }).pedigree.length, 0);
+  assert.equal(resolveExhibitionGenetics({ ...hidden, showDeps: true }).deps.length, 1);
+  assert.equal(resolveExhibitionGenetics(normalizedResult({ ...snapshot, depsSource: "catalog", evaluationDate: "2020-01-01" }), animal).evaluationDate, "");
+});
+
+test("maternal ancestors never join the paternal branch, even with missing parents", () => {
+  const branches = exhibitionPedigreeBranches(animal.pedigree);
+  assert.deepEqual(branches[0].ancestors.map(m => m.relation), ["paternal_grandsire", "paternal_granddam"]);
+  assert.deepEqual(branches[1].ancestors.map(m => m.relation), ["maternal_grandsire", "maternal_granddam"]);
+  const sparse = exhibitionPedigreeBranches([{ relation: "sire", name: "Padre" }, { relation: "maternal_grandsire", name: "Abuelo materno" }]);
+  assert.equal(sparse[0].ancestors.length, 0);
+  assert.equal(sparse[1].parent, undefined);
+  assert.equal(sparse[1].ancestors[0].label, "Abuelo materno");
+});
+
+test("invalid genetic dates, duplicate relatives and oversized DEPs fail validation", () => {
+  assert.throws(() => normalizedResult({ evaluationDate: "2026-02-30" }));
+  assert.throws(() => normalizedResult({ birthDate: "2025-02-29" }));
+  assert.throws(() => normalizedResult({ pedigree: [animal.pedigree[0], animal.pedigree[0]] }));
+  assert.throws(() => normalizedResult({ pedigree: [{ relation: "unknown", name: "Incorrecto" }] }));
+  assert.throws(() => normalizedResult({ deps: Array.from({ length: 41 }, () => animal.deps[0]) }));
+  assert.throws(() => normalizedResult({ pedigree: Array.from({ length: 7 }, () => animal.pedigree[0]) }));
 });
