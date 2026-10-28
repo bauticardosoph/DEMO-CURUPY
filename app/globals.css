@@ -381,3 +381,11 @@ footer>.brandMark img{width:auto;height:clamp(108px,8vw,136px);max-width:min(100
 .catalogPdfAction{display:flex;justify-content:flex-end;margin:-32px 5vw 28px}.catalogPdfAction a{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 20px;border:1px solid var(--line);background:var(--ink);color:#fff;text-decoration:none;font:600 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;transition:opacity .2s}.catalogPdfAction a:hover{opacity:.82}@media(max-width:700px){.catalogPdfAction{justify-content:stretch;margin:-25px 20px 24px}.catalogPdfAction a{width:100%;text-align:center}}
 .hero{background-image:var(--hero-desktop,url('/hero-cattle.jpg'));background-position:center 46%;background-size:cover}
 @media(max-width:700px){.hero{background-image:var(--hero-mobile,var(--hero-desktop,url('/hero-cattle.jpg')))}}
+
+/* Discreet developer attribution, limited to the public footer's bottom line. */
+footer>.siteFooterBottom{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:12px 24px;line-height:1.6}
+.siteFooterBottom .siteDeveloperCredit{font-size:11px;letter-spacing:.02em;text-transform:none;color:rgba(255,255,255,.72)}
+.siteDeveloperCredit>a{color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.siteDeveloperCredit>a:hover{color:#fff}
+.siteDeveloperCredit>a:focus-visible{outline:2px solid currentColor;outline-offset:4px;border-radius:2px}
+@media(max-width:700px){footer>.siteFooterBottom{flex-direction:column;align-items:flex-start;gap:8px}}
